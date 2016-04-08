@@ -50,10 +50,21 @@ int Zedboard::ReadNumber() {
 	int i;
 	int result = 0;
 	for (i = 0; i < 8; i++) {
-		int switch_val = RegisterRead(ptr, gpio_sw1_offset + (i*4)) * (int) pow(2.0, (double) i);
+		int switch_val = RegisterRead(this.ptr, gpio_sw1_offset + (i*4)) * (int) pow(2.0, (double) i);
 		result = result + switch_val;
 	}
 	return result;
+}
+
+/** DisplayNumber */
+void Zedboard::DisplayNumber() {
+	int i;
+	unsigned mask;
+	for (i = 0; i < 8; i++) {
+		mask = ((1 << 1) - 1) << i;
+		single_bit = value & mask;
+		SetLedState(this.ptr, i, single_bit)
+	}
 }
 
 /** Add */

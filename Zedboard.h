@@ -57,7 +57,11 @@ public:
 	/** Read in the number specified by the state of the switches
 	 *  as an 8-bit integer. 
 	 */
-	 void Zedboard::ReadNumber();
+	void Zedboard::ReadNumber();
+	 
+	/** Display the number stored in memory on the Zedboard LEDs
+	 */
+	void Zedboard::DisplayNumber();
 	 
 	 /** Add the number stored in memory to the number specified by the switches
 	 */

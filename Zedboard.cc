@@ -7,8 +7,7 @@
 #include <math.h>
 
 #include "memmap_constants.h"
-#include "zedboard.h"
-
+#include "Zedboard.h"
 
 /** Constructor */
 Zedboard::Zedboard() {
@@ -22,26 +21,31 @@ Zedboard::~Zedboard() {
 	close(fd);
 }
 
+/** getptr */
+char* Zedboard::getptr() {
+	return ptr;
+}
+
 /** RegisterRead */
-int Zedboard::RegisterRead(char *ptr, int offset) {
+int Zedboard::RegisterRead(int offset) {
   return * (int *) (ptr + offset);
 }
 
 /** RegisterWrite */
-void Zedboard::RegisterWrite(char *ptr, int offset, int value) {
+void Zedboard::RegisterWrite(int offset, int value) {
   * (int *) (ptr + offset) = value;
 }
 
 /** SetSingleLedState */
-void Zedboard::SetSingleLedState(void *ptr, int led_index, int state) {
-  RegisterWrite(ptr, gpio_led1_offset + (led_index * 4), state);
+void Zedboard::SetSingleLedState(int led_index, int state) {
+  RegisterWrite(gpio_led1_offset + (led_index * 4), state);
 }
 
 /** SetLedStates */
 void Zedboard::SetLedStates() {
 	int i;
     for (i = 0; i < 8; i++) {
-      SetLedState(this.ptr, i, RegisterRead(ptr, gpio_sw1_offset + (i*4)));
+      SetSingleLedState(i, RegisterRead(gpio_sw1_offset + (i*4)));
     }
 }
 
@@ -50,39 +54,39 @@ int Zedboard::ReadNumber() {
 	int i;
 	int result = 0;
 	for (i = 0; i < 8; i++) {
-		int switch_val = RegisterRead(this.ptr, gpio_sw1_offset + (i*4)) * (int) pow(2.0, (double) i);
+		int switch_val = RegisterRead(gpio_sw1_offset + (i*4)) * (int) pow(2.0, (double) i);
 		result = result + switch_val;
 	}
 	return result;
 }
 
 /** DisplayNumber */
-void Zedboard::DisplayNumber() {
+void Zedboard::DisplayNumber(int value) {
 	int i;
 	unsigned mask;
 	for (i = 0; i < 8; i++) {
-		mask = ((1 << 1) - 1) << i;
-		single_bit = value & mask;
-		SetLedState(this.ptr, i, single_bit)
+		int mask = ((1 << 1) - 1) << i;
+		int single_bit = value & mask;
+		SetSingleLedState(i, single_bit);
 	}
 }
 
 /** Add */
 int Zedboard::Add() {
-	return this.calc_mem + ReadNumber();
+	return calc_mem + ReadNumber();
 }
 
 /** Subtract */
 int Zedboard::Subtract() {
-	return this.calc_mem - ReadNumber();
+	return calc_mem - ReadNumber();
 }
 
 /** Multiply */
 int Zedboard::Multiply() {
-	return this.calc_mem * ReadNumber();
+	return calc_mem * ReadNumber();
 }
 
 /** Divide */
 int Zedboard::Divide() {
-	return this.calc_mem  / ReadNumber();
+	return calc_mem  / ReadNumber();
 }

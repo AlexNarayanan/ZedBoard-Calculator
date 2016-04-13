@@ -8,5 +8,14 @@
 #include "memmap_constants.h"
 
 int main() {
-
+	
+	//cout << "Program is running" << endl;
+	
+	//Zedboard zedboard;
+	//if (zedboard.getptr() == MAP_FAILED) {
+	//	perror("Mapping I/O memor failed - Did you run with sudo?\n");
+	//	return -1;
+	//}
+	
+	
 }

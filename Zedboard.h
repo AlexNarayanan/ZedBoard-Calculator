@@ -1,3 +1,6 @@
+#ifndef ZEDBOARD_H
+#define ZEDBOARD_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <fcntl.h>
@@ -8,7 +11,7 @@
 
 #include "memmap_constants.h"
 
-class ZedBoard {
+class Zedboard {
 
 	char *ptr;
 	int fd;
@@ -19,10 +22,15 @@ class ZedBoard {
 public: 
 
 	/** Constructor */
-	ZedBoard();
+	Zedboard();
 	
 	/** Destructor */
 	~Zedboard();
+	
+	/** 
+	 * Return the ptr
+	 */
+	char* getptr();
 	
 	/**
 	 * Read a 4-byte value from the specified general-purpose I/O location.
@@ -31,7 +39,7 @@ public:
 	 * @param offset Offset where device is mapped.
 	 * @return Value read.
 	 */
-	int Zedboard::RegisterRead(char *ptr, int offset);
+	int RegisterRead(int offset);
 	
 	/**
 	 * Write a 4-byte value at the specified general-purpose I/O location.
@@ -40,7 +48,7 @@ public:
 	 * @parem offset Offset where device is mapped.
 	 * @param value Value to be written.
 	 */
-	void Zedboard::RegisterWrite(char *ptr, int offset, int value);	
+	void RegisterWrite(int offset, int value);	
 	
 	/** Set the state of the LED with the given index.
 	 *
@@ -48,33 +56,37 @@ public:
 	 * @parem led_index LED index between 0 and 7
 	 * @param state Turn on (1) or off (0)
 	 */
-	void Zedboard::SetSingleLedState(void *ptr, int led_index, int state);
+	void SetSingleLedState(int led_index, int state);
 	
 	/** Set the state of all LEDs to match the state of the switches
 	 */
-	void Zedboard::SetLedStates();
+	void SetLedStates();
 	
 	/** Read in the number specified by the state of the switches
 	 *  as an 8-bit integer. 
 	 */
-	void Zedboard::ReadNumber();
+	int ReadNumber();
 	 
 	/** Display the number stored in memory on the Zedboard LEDs
 	 */
-	void Zedboard::DisplayNumber();
-	 
+	void DisplayNumber(int value);
+	
 	 /** Add the number stored in memory to the number specified by the switches
 	 */
-	void Zedboard::Add();
+	int Add();
 	 
 	/** Subtract the number specified by the switches from the number stored in memory
 	 */
-	void Zedboard::Subtract();
+	int Subtract();
 	  
 	/** Multiple the number stored in memory by the number specified by the switches 
 	 */
-	void Zedboard::Multiply();
+	int Multiply();
 
 	/** Divide the number stored in memory by the number specified by the switches
 	 */
-	void Zedboard::Divide();	
+	int Divide();
+	
+};
+
+#endif	

@@ -1,5 +1,5 @@
 // Memmap Addresses
-#ifndef(MEMMAP_CONSTANTS_H)
+#if !defined(MEMMAP_CONSTANTS_H)
 #define MEMMAP_CONSTANTS_H
 
 // Physical base address of GPIO

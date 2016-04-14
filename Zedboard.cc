@@ -11,6 +11,7 @@
 
 /** Constructor */
 Zedboard::Zedboard() {
+	calc_mem = 0;
 	fd = open( "/dev/mem", O_RDWR);
 	ptr = (char *) mmap( NULL, gpio_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, gpio_address);
 }
@@ -60,13 +61,19 @@ int Zedboard::ReadNumber() {
 	return result;
 }
 
+/** StoreNumber */
+void Zedboard::StoreNumber(int value) {
+	// Sanitize by cutting off any 8-bit overflow
+	calc_mem = value % 256;
+}
+
 /** DisplayNumber */
-void Zedboard::DisplayNumber(int value) {
+void Zedboard::DisplayNumber() {
 	int i;
 	unsigned mask;
 	for (i = 0; i < 8; i++) {
 		int mask = ((1 << 1) - 1) << i;
-		int single_bit = value & mask;
+		int single_bit = calc_mem & mask;
 		SetSingleLedState(i, single_bit);
 	}
 }
@@ -89,4 +96,19 @@ int Zedboard::Multiply() {
 /** Divide */
 int Zedboard::Divide() {
 	return calc_mem  / ReadNumber();
+}
+
+/** PushButtonGet */
+int PushButtonGet() {
+	if (RegisterRead(gpio_pbtnu_offet))
+		return 1;
+	if (RegisterRead(gpio_pbtnd_offset))
+		return 2;
+	if (RegisterRead(gpio_pbtnr_offset))
+		return 3;
+	if (RegisterRead(gpio_pbtnl_offset))
+		return 4;
+	if (RegisterRead(gpio_pbtnc_offset))
+		return 5;
+	return 0;
 }

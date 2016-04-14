@@ -66,10 +66,15 @@ public:
 	 *  as an 8-bit integer. 
 	 */
 	int ReadNumber();
+	
+	/** Store the given number in calc_mem
+	 *  Sanitize the number before storing
+	 */
+	void StoreNumber(int value);
 	 
 	/** Display the number stored in memory on the Zedboard LEDs
 	 */
-	void DisplayNumber(int value);
+	void DisplayNumber();
 	
 	 /** Add the number stored in memory to the number specified by the switches
 	 */
@@ -87,6 +92,9 @@ public:
 	 */
 	int Divide();
 	
+	/** Read the current state of the push button
+	 */
+	int PushButtonGet();
 };
 
 #endif	
